@@ -2,7 +2,7 @@
 <ul>
   <li>Class : DAMG6210</li>
   <li>CRN : 16149</li>
-  <li>Team : Crime Board</li>
+  <li>Team Name: Crime Board</li>
   <li>Team members:</li>
   <ul>
     <li>Sayeed Ahmed - 002191535</li> 
