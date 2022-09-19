@@ -6,7 +6,7 @@
   <li>Team members:</li>
   <ul>
     <li>Sayeed Ahmed - 002191535</li> 
-    <li>atarajan Lekshmi Narayana Pillai - 002766033</li>
+    <li>Natarajan Lekshmi Narayana Pillai - 002766033</li>
     <li>Chaman Betrabet - 002784662</li>
   </ul>
 </ul> 
