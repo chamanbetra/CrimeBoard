@@ -22,7 +22,7 @@ The objective of our database is to have a centeralized data source that would c
 
 <li>Location Service - Navigation services such as Google Maps can have an option to provide the safest route from Point A to Point B.</li>
 
-<li>Tourist Destinations - Make tourists aware of a particular area's safety before they visit.</li>
+<li>Tourist Destinations - Increase awareness of a particular area's safety among tourists before they visit.</li>
 </ul>
 The data would be collected through various sources to collate and create a new database that would be able to answer questions on the data like how crime has progressed, what type of crimes take place and their severity, provide a corelation between various factors(gross income of an area, time etc) and crime committed, etc.
 </p>
