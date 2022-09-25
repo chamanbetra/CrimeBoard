@@ -14,15 +14,15 @@
 <p>
 <h3>Summary</h3>
 
-The objective of our database is to have a centeralized data source that would cater to any crime analysis system. It would be able to provide an efficient database for various use cases such as:
+The objective of our database is to have a centralized data source that would cater to any crime analysis system. It would be able to provide an efficient database for various use cases such as:
 <ul>
-<li>Real Estate - Provide a database to have data visualization for crime rate in a locality.</li>
+<li>Real Estate - Provide a database to have data visualization for the crime rate in a locality.</li>
 
-<li>Law Enforcement - Provide the law enforcement to have a source to gather and track the various crimes around their jurisdiction. </li>
+<li>Law Enforcement - Provide law enforcement a source to gather and track the various crimes around their jurisdiction. </li>
 
 <li>Location Service - Navigation services such as Google Maps can have an option to provide the safest route from Point A to Point B.</li>
 
 <li>Tourist Destinations - Make tourists aware of a particular area's safety before they visit.</li>
 </ul>
-The data would be collected through various sources to collate and create a new database that would be able to answer questions on the data like how crime has progressed, what type of crimes take place and their severity, provide a corelation between various factors(gross income of an area, time etc) and crime committed, etc.
+The data would be collected through various sources to collate and create a new database that would be able to answer questions on the data like how crime has progressed, what type of crimes take place, and their severity and provide a correlation between various factors(gross income of an area, time, etc) and crime committed, etc. 
 </p>
