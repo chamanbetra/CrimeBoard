@@ -42,12 +42,8 @@ for tweet in tweets:
     full = tweet.full_text
     wanted = "WANTED"
 
-
-    my_string = "I love Apple juice, it is delicious."
-    re.search('(?<=I love )(\w+)', my_string).group(1)
-    # res = full[full.find(wanted) + len(wanted):]
-    # print(res)
-    # if(full.find("Wanted")):
+    if (re.search('(?<=WANTED )(\w+)', full)) != None:
+        print(re.search('(?<=WANTED )!?(?:\s+[a-z]!+)*([^\:]*)', full).group(0))
 
 
 df = pd.DataFrame(data, columns=columns)
