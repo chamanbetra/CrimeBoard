@@ -85,7 +85,7 @@ for uni in uniq:
     tweet_userhist.append(tweet_usrhist)
 data_df_user_hist = pd.DataFrame(tweet_userhist)
 
-connecting to SQL DB
+#connecting to SQL DB
 engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}"
                        .format(user="root",
                                pw="1996Ch1609*",
