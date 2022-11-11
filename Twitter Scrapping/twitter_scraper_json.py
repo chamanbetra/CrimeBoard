@@ -85,11 +85,6 @@ for uni in uniq:
     tweet_userhist.append(tweet_usrhist)
 data_df_user_hist = pd.DataFrame(tweet_userhist)
 
-print(data_df_user_hist)
-
-
-print(data_df['hashtag'])
-print(data_df_user)
 connecting to SQL DB
 engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}"
                        .format(user="root",
@@ -99,3 +94,4 @@ engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}"
 # converting dataframe to SQL table
 data_df.to_sql('tweets', con=engine, if_exists='append', chunksize=100, index=False)
 data_df_user.to_sql('tweet_users', con=engine, if_exists='append', chunksize=100, index=False)
+data_df_user_hist.to_sql('tweet_userhist', con=engine, if_exists='append', chunksize=100, index=False)
