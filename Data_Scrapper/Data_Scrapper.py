@@ -13,3 +13,14 @@ df_district_codes = pd.DataFrame(pd.read_csv('district_code.csv'))
 print(df_master_boston_data.head())
 print(df_offence_codes.head())
 print(df_district_codes.head())
+
+
+
+
+
+engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}"
+                       .format(user="root",
+                               pw="1996Ch1609*",
+                               db="crimeboard"))
+
+df_district_codes.to_sql('districts', con=engine, if_exists='append', chunksize=100, index=False)
