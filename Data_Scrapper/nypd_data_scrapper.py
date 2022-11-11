@@ -18,13 +18,19 @@ new_york_results_df = pd.DataFrame.from_records(new_york_results).drop([':@compu
 # print(results_df.head(1))
 print("Columns in the data fetched : \n")
 
-columns = new_york_results_df.columns
-print(columns)
+# columns = new_york_results_df.columns
+# print(columns)
 print(new_york_results_df.head(5))
-print(columns.__len__())
+# print(columns.__len__())
+data_types = new_york_results_df.dtypes
+print(data_types)
 
 boston_url = "https://data.boston.gov/dataset/6220d948-eae2-4e4b-8723-2dc8e67722a3/resource/313e56df-6d77-49d2-9c49-ee411f10cf58/download/tmpobugbywv.csv"
-boston_data = pd.read_csv(boston_url)
+boston_data = pd.read_csv(boston_url, low_memory=False)
+print(boston_data.head())
+
+data_types = boston_data.dtypes
+print(data_types)
 
 
 

@@ -3,6 +3,8 @@ import configparser  # importing configparser for reading config.ini
 import pandas as pd # importing pandas for dataframe related operations
 from sqlalchemy import create_engine # for sql related operations
 from datetime import datetime # for date conversion
+import datetime
+from datetime import timedelta
 
 config = configparser.ConfigParser()
 
@@ -24,7 +26,7 @@ alltweets = []
 keyword_list = ['NYPDTips', 'bostonpolice', 'FairfieldPolice', 'crime', 'gunshot']
 #
 for keyword in keyword_list:
-    new_tweets = tweepy.Cursor(api.search_tweets, q=keyword).items(30)
+    new_tweets = tweepy.Cursor(api.search_tweets, q=keyword).items(8)
     alltweets.extend(new_tweets)
 
 tweet_list = []
@@ -33,6 +35,7 @@ tweet_userlist = []
 for tweet in alltweets:
     tweet_information = dict()
     tweet_userinfo = dict()
+    tweet_userhist = dict()
     user_dictionary = tweet._json['user']
     # appending user information
     tweet_userinfo['id'] = user_dictionary['id']
@@ -57,11 +60,26 @@ for tweet in alltweets:
         pass
     tweet_information['country'] = "United States"
     tweet_information['id'] = user_dictionary['id']
+    tweet_information['source'] = tweet.source
+    tweet_information['hashtag'] = tweet.entities.hastags
     tweet_list.append(tweet_information)
     tweet_userlist.append(tweet_userinfo)
+
 data_df = pd.DataFrame(tweet_list).drop_duplicates()
 data_df_user = pd.DataFrame(tweet_userlist).drop_duplicates()
+    # #user history(past 24hr tweet)
+    # uniq = data_df_user['id'].unique()
+    # for uni in uniq:
+    # if data_df_user.created_at>datetime.datetime.now()-timedelta(hours=24):
+    # tweet_userhist.append(uni)
 
+
+
+
+
+#
+# print(data_df['hashtag'])
+# print(data_df_user)
 # connecting to SQL DB
 engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}"
                        .format(user="root",
