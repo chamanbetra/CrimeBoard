@@ -1,11 +1,12 @@
-import pytz    # for timezone related operations
+import pytz
 import tweepy  # importing tweepy library for twitter API
 import configparser  # importing configparser for reading config.ini
-import pandas as pd # importing pandas for dataframe related operations
-from sqlalchemy import create_engine # for sql related operations
+import pandas as pd  # importing pandas for dataframe related operations
+from sqlalchemy import create_engine  # for sql related operations
+# import datetime
 from datetime import datetime, timedelta  # for date conversion
 
-config = configparser.ConfigParser() # initializing configparser object
+config = configparser.ConfigParser()
 
 config.read('config.ini')
 
@@ -22,15 +23,11 @@ api = tweepy.API(auth)
 
 alltweets = []
 
-keyword_list = ['#crime', '#gunshot', '#violence', "#criminal", '#safety']
+keyword_list = ['NYPDTips', 'bostonpolice', 'FairfieldPolice', 'crime', 'gunshot']
 #
 for keyword in keyword_list:
-    try:
-        new_tweets = tweepy.Cursor(api.search_tweets, q=keyword).items(200)
-        alltweets.extend(new_tweets)
-    except tweepy.TweepyException as e:
-        print(e)
-
+    new_tweets = tweepy.Cursor(api.search_tweets, q=keyword).items(100)
+    alltweets.extend(new_tweets)
 
 tweet_list = []
 tweet_userlist = []
@@ -43,8 +40,8 @@ for tweet in alltweets:
     tweet_userinfo['id'] = user_dictionary['id']
     tweet_userinfo['screen_name'] = user_dictionary['screen_name']
     tweet_userinfo['followers_count'] = user_dictionary['followers_count']
-    datetime_object = datetime.strftime(
-        datetime.strptime(user_dictionary['created_at'], '%a %b %d %H:%M:%S +0000 %Y'), '%Y-%m-%d %H:%M:%S')
+    datetime_object = datetime.strftime(datetime.strptime(user_dictionary['created_at'], '%a %b %d %H:%M:%S +0000 %Y'),
+                                        '%Y-%m-%d %H:%M:%S')
     tweet_userinfo['created_at'] = datetime_object
 
     # appending tweet information
@@ -62,46 +59,53 @@ for tweet in alltweets:
         pass
     tweet_information['country'] = "United States"
     tweet_information['id'] = user_dictionary['id']
+    tweet_information['source'] = tweet.source
+    # tweet_information['hashtag'] = tweet.entities.hastags
     tweet_list.append(tweet_information)
     tweet_userlist.append(tweet_userinfo)
 
-
-#end of for loop
 data_df = pd.DataFrame(tweet_list).drop_duplicates()
 data_df_user = pd.DataFrame(tweet_userlist).drop_duplicates()
 
-#user history(past 24hr tweet)
+####Changes were done here###
+# user history(past 24hr tweet)
 uniq = data_df_user['id'].unique()
 tz_ny = pytz.timezone('America/New_York')
-tweet_userhist = []
+tweet_userhistory = []
+# tweet_tweetscount = []
 
 for uni in uniq:
     tweet_usrhist = dict()
-    user = uni
-    tweet_usrhist['user_id'] = user
+    # tweet_countsdict = dict()
+    tweets_user = api.user_timeline(user_id=uni, count=20, include_rts=False, tweet_mode='extended')
     tweet_count = 0
-    tweet_times = tweet.created_at
-    if tweet_times > tz_ny.localize(datetime.now()-timedelta(hours=24)):
-        tweet_count = tweet_count + 1
-    tweet_usrhist['tweet_count'] = tweet_count
-    tweet_userhist.append(tweet_usrhist)
-data_df_user_hist = pd.DataFrame(tweet_userhist).drop_duplicates()
+    for info in tweets_user:
+        tweet_times = info.created_at
+        if tweet_times > tz_ny.localize(datetime.now() - timedelta(hours=24)):
+            tweet_count = tweet_count + 1
+            tweet_usrhist['user_id'] = format(info.id)
+            tweet_usrhist['tweets'] = info.full_text
+        # if tweet_count>0:
+        #     tweet_countsdict['user_id'] = uni
+        #     tweet_countsdict['Tweet count'] = tweet_count
+    tweet_userhistory.append(tweet_usrhist)
+    # tweet_tweetscount.append(tweet_countsdict)
+data_df_user_hist = pd.DataFrame(tweet_userhistory)
+# data_df_user_tweet_count = pd.DataFrame(tweet_tweetscount)
+data_df_user_hist.dropna(inplace=False)
+print(data_df_user_hist.head())
+# print(data_df_user_tweet_count.head())
+###To here###
 
 
-
-# connecting to SQL DB
+#connecting to SQL DB
 engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}"
                        .format(user="root",
                                pw="1996Ch1609*",
                                db="crimeboard"))
 
 # converting dataframe to SQL table
-data_df_user.to_sql('tweet_users', con=engine, if_exists='append', chunksize=100, index=False) #tweet users table
-data_df.to_sql('tweets', con=engine, if_exists='append', chunksize=100, index=False) #tweets table
-data_df_user_hist.to_sql('tweet_userhist', con=engine, if_exists='append', chunksize=100, index=False)#tweet history table
-
-
-
-
-
-
+data_df.to_sql('tweets', con=engine, if_exists='append', chunksize=100, index=False)
+data_df_user.to_sql('tweet_users', con=engine, if_exists='append', chunksize=100, index=False)
+data_df_user_hist.to_sql('tweet_userhist', con=engine, if_exists='append', chunksize=100, index=False)
+# data_df_user_tweet_count.to_sql('tweet_counts', con=engine, if_exists='append', chunksize=100, index=False)
