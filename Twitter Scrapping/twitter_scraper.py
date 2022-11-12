@@ -1,11 +1,11 @@
-import pytz
+import pytz    # for timezone related operations
 import tweepy  # importing tweepy library for twitter API
 import configparser  # importing configparser for reading config.ini
 import pandas as pd # importing pandas for dataframe related operations
 from sqlalchemy import create_engine # for sql related operations
 from datetime import datetime, timedelta  # for date conversion
 
-config = configparser.ConfigParser()
+config = configparser.ConfigParser() # initializing configparser object
 
 config.read('config.ini')
 
