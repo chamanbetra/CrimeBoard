@@ -23,10 +23,10 @@ api = tweepy.API(auth)
 
 alltweets = []
 
-keyword_list = ['NYPDTips', 'bostonpolice', 'FairfieldPolice', 'crime', 'gunshot']
+keyword_list = ['#crime', '#gunshot', '#violence', '#safety']
 #
 for keyword in keyword_list:
-    new_tweets = tweepy.Cursor(api.search_tweets, q=keyword).items(10)
+    new_tweets = tweepy.Cursor(api.search_tweets, q=keyword).items(200)
     alltweets.extend(new_tweets)
 
 tweet_list = []
@@ -93,7 +93,6 @@ for uni in uniq:
 data_df_user_hist = pd.DataFrame(tweet_userhistory)
 # data_df_user_tweet_count = pd.DataFrame(tweet_tweetscount)
 data_df_user_tweet_hist = data_df_user_hist.dropna(inplace=False)
-print(data_df_user_tweet_hist.head())
 # print(data_df_user_tweet_count.head())
 ###To here###
 
