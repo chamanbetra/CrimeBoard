@@ -3,7 +3,6 @@ import tweepy  # importing tweepy library for twitter API
 import configparser  # importing configparser for reading config.ini
 import pandas as pd  # importing pandas for dataframe related operations
 from sqlalchemy import create_engine  # for sql related operations
-# import datetime
 from datetime import datetime, timedelta  # for date conversion
 
 config = configparser.ConfigParser()
@@ -59,24 +58,19 @@ for tweet in alltweets:
         pass
     tweet_information['country'] = "United States"
     tweet_information['id'] = user_dictionary['id']
-    # tweet_information['source'] = tweet.source
-    # tweet_information['hashtag'] = tweet.entities.hastags
     tweet_list.append(tweet_information)
     tweet_userlist.append(tweet_userinfo)
 
 data_df = pd.DataFrame(tweet_list).drop_duplicates()
 data_df_user = pd.DataFrame(tweet_userlist).drop_duplicates()
 
-####Changes were done here###
 # user history(past 24hr tweet)
 uniq = data_df_user['id'].unique()
 tz_ny = pytz.timezone('America/New_York')
 tweet_userhistory = []
-# tweet_tweetscount = []
 
 for uni in uniq:
     tweet_usrhist = dict()
-    # tweet_countsdict = dict()
     tweets_user = api.user_timeline(user_id=uni, count=20, include_rts=False, tweet_mode='extended')
     tweet_count = 0
     for info in tweets_user:
@@ -85,16 +79,9 @@ for uni in uniq:
             tweet_count = tweet_count + 1
             tweet_usrhist['user_id'] = format(info.id)
             tweet_usrhist['tweet_text'] = info.full_text
-        # if tweet_count>0:
-        #     tweet_countsdict['user_id'] = uni
-        #     tweet_countsdict['Tweet count'] = tweet_count
     tweet_userhistory.append(tweet_usrhist)
-    # tweet_tweetscount.append(tweet_countsdict)
 data_df_user_hist = pd.DataFrame(tweet_userhistory)
-# data_df_user_tweet_count = pd.DataFrame(tweet_tweetscount)
 data_df_user_tweet_hist = data_df_user_hist.dropna(inplace=False)
-# print(data_df_user_tweet_count.head())
-###To here###
 
 
 #connecting to SQL DB
@@ -107,4 +94,3 @@ engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}"
 data_df_user.to_sql('tweet_users', con=engine, if_exists='append', chunksize=100, index=False)
 data_df.to_sql('tweets', con=engine, if_exists='append', chunksize=100, index=False)
 data_df_user_tweet_hist.to_sql('tweet_userhist', con=engine, if_exists='append', chunksize=100, index=False)
-# data_df_user_tweet_count.to_sql('tweet_counts', con=engine, if_exists='append', chunksize=100, index=False)
